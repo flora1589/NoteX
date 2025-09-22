@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoteX - Smart Notes Exchange Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .xp-bar {
+            background: linear-gradient(90deg, #ffd700 0%, #ffed4e 100%);
+            height: 8px;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .badge-glow {
+            animation: badge-glow 2s infinite alternate;
+        }
+        
+        @keyframes badge-glow {
+            0% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+            100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+        }
+        
+        .floating-element {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .quest-complete {
+            background: linear-gradient(45deg, #10b981, #34d399);
+        }
+        
+        .hinglish-text {
+            font-style: italic;
+            color: #7c3aed;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="gradient-bg text-white p-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <!-- Logo -->
+            <div class="flex items-center space-x-2">
+                <div class="text-2xl font-bold">NoteX</div>
+                <div class="text-sm opacity-80 hidden sm:block">Smart Learning Hub</div>
+            </div>
+            
+            <!-- Main Navigation - Desktop -->
+            <div class="hidden lg:flex space-x-6">
+                <button onclick="showSection('home')" class="hover:text-yellow-300 transition-colors">Home</button>
+                <button onclick="showSection('notes-hub')" class="hover:text-yellow-300 transition-colors">Notes</button>
+                <button onclick="showSection('practice')" class="hover:text-yellow-300 transition-colors">Practice</button>
+                <button onclick="showSection('quests')" class="hover:text-yellow-300 transition-colors">Quests</button>
+                <button onclick="showSection('upload')" class="hover:text-yellow-300 transition-colors">Upload</button>
+                <div class="relative group">
+                    <button class="hover:text-yellow-300 transition-colors">More ▾</button>
+                    <div class="absolute top-full right-0 mt-2 w-40 bg-white text-gray-800 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                        <button onclick="showSection('about')" class="block w-full text-left px-4 py-2 hover:bg-gray-100 rounded-t-lg">About</button>
+                        <button onclick="showSection('contact')" class="block w-full text-left px-4 py-2 hover:bg-gray-100 rounded-b-lg">Contact</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Side -->
+            <div class="flex items-center space-x-3">
+                <!-- XP Tracker - Simplified -->
+                <div class="hidden md:flex items-center space-x-2 bg-white/20 px-3 py-1 rounded-full">
+                    <span class="text-sm">⚡ 1,250</span>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="lg:hidden w-8 h-8 flex items-center justify-center">
+                    <div class="w-5 h-5 flex flex-col justify-center space-y-1">
+                        <div class="w-full h-0.5 bg-white"></div>
+                        <div class="w-full h-0.5 bg-white"></div>
+                        <div class="w-full h-0.5 bg-white"></div>
+                    </div>
+                </button>
+                
+                <!-- Profile -->
+                <button onclick="showSection('profile')" class="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center text-purple-800 font-bold">F</button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="lg:hidden hidden mt-4 pb-4 border-t border-white/20">
+            <div class="flex flex-col space-y-3 mt-4">
+                <button onclick="showSection('home'); toggleMobileMenu()" class="text-left hover:text-yellow-300 transition-colors">🏠 Home</button>
+                <button onclick="showSection('notes-hub'); toggleMobileMenu()" class="text-left hover:text-yellow-300 transition-colors">📚 Notes Hub</button>
+                <button onclick="showSection('practice'); toggleMobileMenu()" class="text-left hover:text-yellow-300 transition-colors">🎯 Practice Arena</button>
+                <button onclick="showSection('quests'); toggleMobileMenu()" class="text-left hover:text-yellow-300 transition-colors">🎮 Weekly Quests</button>
+                <button onclick="showSection('upload'); toggleMobileMenu()" class="text-left hover:text-yellow-300 transition-colors">📤 Upload Notes</button>
+                <button onclick="showSection('about'); toggleMobileMenu()" class="text-left hover:text-yellow-300 transition-colors">ℹ️ About</button>
+                <button onclick="showSection('contact'); toggleMobileMenu()" class="text-left hover:text-yellow-300 transition-colors">📞 Contact</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Homepage -->
+    <div id="home-section" class="section">
+        <!-- Hero Section -->
+        <div class="gradient-bg text-white py-20">
+            <div class="max-w-6xl mx-auto px-4 text-center">
+                <h1 class="text-6xl font-bold mb-6 floating-element">
+                    NoteX: <span class="text-yellow-300">Smart Notes</span> Exchange
+                </h1>
+                <p class="text-xl mb-4 opacity-90">
+                    India's First Gamified Learning Platform
+                </p>
+                <p class="text-2xl mb-8 font-semibold text-yellow-300 hinglish-text">
+                    "Padhai karo, XP kamao, badges jeeto!" 🎮
+                </p>
+                
+                <div class="flex flex-wrap justify-center gap-4 mb-12">
+                    <button onclick="showSection('notes-hub')" class="bg-white text-purple-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-yellow-100 transition-colors">
+                        📚 Browse Notes
+                    </button>
+                    <button onclick="showSection('upload')" class="bg-yellow-400 text-purple-800 px-8 py-4 rounded-full font-semibold text-lg hover:bg-yellow-300 transition-colors">
+                        📤 Upload & Earn XP
+                    </button>
+                    <button onclick="showSection('practice')" class="bg-green-500 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-green-400 transition-colors">
+                        🎯 Practice Arena
+                    </button>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="grid md:grid-cols-4 gap-6 text-center">
+                    <div class="bg-white/10 p-4 rounded-lg">
+                        <div class="text-2xl font-bold">15,000+</div>
+                        <div class="text-sm opacity-80">Notes Shared</div>
+                    </div>
+                    <div class="bg-white/10 p-4 rounded-lg">
+                        <div class="text-2xl font-bold">5,000+</div>
+                        <div class="text-sm opacity-80">Active Students</div>
+                    </div>
+                    <div class="bg-white/10 p-4 rounded-lg">
+                        <div class="text-2xl font-bold">200+</div>
+                        <div class="text-sm opacity-80">Colleges</div>
+                    </div>
+                    <div class="bg-white/10 p-4 rounded-lg">
+                        <div class="text-2xl font-bold">50,000+</div>
+                        <div class="text-sm opacity-80">XP Earned</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Founder Members Section -->
+        <div class="max-w-6xl mx-auto px-4 py-16 bg-white">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">👤 Meet Our Founder</h2>
+                <p class="text-gray-600 text-lg">The passionate mind behind India's first gamified learning platform</p>
+            </div>
+            
+            <div class="max-w-md mx-auto">
+                <!-- Founder -->
+                <div class="text-center bg-gradient-to-br from-purple-50 to-blue-50 p-8 rounded-2xl card-hover">
+                    <div class="w-32 h-32 bg-gradient-to-br from-purple-400 to-blue-500 rounded-full mx-auto mb-6 flex items-center justify-center text-white text-4xl font-bold floating-element">
+                        F
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2 text-gray-800">Flora Thakur</h3>
+                    <p class="text-purple-600 font-semibold mb-4">Founder </p>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        Computer Science student at IIBM Patna. Passionate about creating a student-powered note exchange 
+                        where knowledge flows freely, studying feels less lonely, and collaboration wins over competition. 
+                        <span class="hinglish-text">"Smart Notes. Real Students."</span>
+                    </p>
+                    <div class="flex justify-center space-x-4 mb-4">
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm cursor-pointer hover:bg-blue-600 transition-colors">in</div>
+                        <div class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-white text-sm cursor-pointer hover:bg-gray-900 transition-colors">𝕏</div>
+                    </div>
+                    <div class="bg-white/50 p-3 rounded-lg">
+                        <div class="text-sm text-gray-600">💡 <strong>Vision:</strong> "Knowledge flows freely among students"</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Team Stats -->
+            <div class="mt-16 text-center">
+                <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-8 rounded-2xl">
+                    <h3 class="text-2xl font-bold mb-6">🎯 Our Journey So Far</h3>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div>
+                            <div class="text-3xl font-bold mb-2">5K+</div>
+                            <div class="text-sm opacity-90">Students Helped</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-bold mb-2">200+</div>
+                            <div class="text-sm opacity-90">Colleges Reached</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-bold mb-2">15K+</div>
+                            <div class="text-sm opacity-90">Notes Shared</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Preview -->
+        <div class="max-w-6xl mx-auto px-4 py-16">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">
+                Why Students Love NoteX 💝
+            </h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg card-hover">
+                    <div class="text-4xl mb-4">🎮</div>
+                    <h3 class="text-xl font-semibold mb-3">Gamified Learning</h3>
+                    <p class="text-gray-600 mb-4">Earn XP, unlock badges, complete weekly quests. Learning has never been this addictive!</p>
+                    <div class="bg-yellow-100 p-2 rounded text-sm text-yellow-800">+50 XP for uploading notes!</div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-lg card-hover">
+                    <div class="text-4xl mb-4">🤖</div>
+                    <h3 class="text-xl font-semibold mb-3">AI Assistant</h3>
+                    <p class="text-gray-600 mb-4 hinglish-text">"Bhai, yeh concept samjha deta hun!" - Your personal study buddy in Hinglish</p>
+                    <div class="bg-purple-100 p-2 rounded text-sm text-purple-800">Coming Soon!</div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-lg card-hover">
+                    <div class="text-4xl mb-4">📱</div>
+                    <h3 class="text-xl font-semibold mb-3">Telegram Bot</h3>
+                    <p class="text-gray-600 mb-4">Get instant notifications for new notes, quiz reminders, and study tips!</p>
+                    <div class="bg-blue-100 p-2 rounded text-sm text-blue-800">Beta Testing</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notes Hub -->
+    <div id="notes-hub-section" class="section hidden">
+        <div class="max-w-6xl mx-auto px-4 py-12">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-800">📚 Notes Hub</h2>
+                <div class="flex space-x-3">
+                    <select class="px-4 py-2 border rounded-lg">
+                        <option>All Semesters</option>
+                        <option>Semester 1</option>
+                        <option>Semester 2</option>
+                        <option>Semester 3</option>
+                        <option>Semester 4</option>
+                        <option>Semester 5</option>
+                        <option>Semester 6</option>
+                        <option>Semester 7</option>
+                        <option>Semester 8</option>
+                    </select>
+                    <select class="px-4 py-2 border rounded-lg">
+                        <option>All Subjects</option>
+                        <option>Data Structures</option>
+                        <option>Database Management</option>
+                        <option>Web Development</option>
+                        <option>Machine Learning</option>
+                        <option>Operating Systems</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="grid md:grid-cols-3 gap-6 mb-12">
+                <div class="bg-gradient-to-br from-blue-500 to-purple-600 text-white p-6 rounded-xl card-hover cursor-pointer">
+                    <div class="text-3xl mb-3">📝</div>
+                    <h3 class="text-xl font-semibold mb-2">Semester Notes</h3>
+                    <p class="opacity-90 mb-4">Complete semester-wise notes from top students</p>
+                    <div class="text-sm opacity-80">2,500+ notes available</div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-green-500 to-teal-600 text-white p-6 rounded-xl card-hover cursor-pointer">
+                    <div class="text-3xl mb-3">📋</div>
+                    <h3 class="text-xl font-semibold mb-2">Past Year Questions</h3>
+                    <p class="opacity-90 mb-4">Previous year exam papers with solutions</p>
+                    <div class="text-sm opacity-80">800+ question papers</div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-orange-500 to-red-600 text-white p-6 rounded-xl card-hover cursor-pointer">
+                    <div class="text-3xl mb-3">📖</div>
+                    <h3 class="text-xl font-semibold mb-2">Study Guides</h3>
+                    <p class="opacity-90 mb-4">Quick revision guides and cheat sheets</p>
+                    <div class="text-sm opacity-80">1,200+ guides</div>
+                </div>
+            </div>
+
+            <!-- Featured Notes -->
+            <h3 class="text-2xl font-bold mb-6 text-gray-800">🔥 Trending This Week</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-semibold">Semester 5</span>
+                            <div class="flex items-center text-yellow-500">
+                                <span class="text-sm mr-1">4.9</span>
+                                <span>⭐</span>
+                            </div>
+                        </div>
+                        <h4 class="font-semibold text-lg mb-2">Machine Learning Complete Notes</h4>
+                        <p class="text-gray-600 text-sm mb-4">Comprehensive ML notes with Python examples and algorithms</p>
+                        <div class="flex justify-between items-center text-sm text-gray-500 mb-4">
+                            <span>📥 2.1k downloads</span>
+                            <span>👤 @AIExpert</span>
+                        </div>
+                        <button class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                            Download (+25 XP)
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">Semester 3</span>
+                            <div class="flex items-center text-yellow-500">
+                                <span class="text-sm mr-1">4.8</span>
+                                <span>⭐</span>
+                            </div>
+                        </div>
+                        <h4 class="font-semibold text-lg mb-2">DBMS Past Year Papers</h4>
+                        <p class="text-gray-600 text-sm mb-4">5 years of solved question papers with detailed explanations</p>
+                        <div class="flex justify-between items-center text-sm text-gray-500 mb-4">
+                            <span>📥 1.8k downloads</span>
+                            <span>👤 @DBMaster</span>
+                        </div>
+                        <button class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                            Download (+25 XP)
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-semibold">Quick Guide</span>
+                            <div class="flex items-center text-yellow-500">
+                                <span class="text-sm mr-1">4.7</span>
+                                <span>⭐</span>
+                            </div>
+                        </div>
+                        <h4 class="font-semibold text-lg mb-2">Data Structures Cheat Sheet</h4>
+                        <p class="text-gray-600 text-sm mb-4">One-page visual guide to all important data structures</p>
+                        <div class="flex justify-between items-center text-sm text-gray-500 mb-4">
+                            <span>📥 3.2k downloads</span>
+                            <span>👤 @CodeNinja</span>
+                        </div>
+                        <button class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                            Download (+25 XP)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Notes Page -->
+    <div id="upload-section" class="section hidden">
+        <div class="max-w-4xl mx-auto px-4 py-12">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">📤 Upload Your Notes</h2>
+                <p class="text-gray-600 mb-2">Share your knowledge and earn XP!</p>
+                <div class="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg inline-block">
+                    🎯 Earn 50-200 XP per upload based on quality!
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <form onsubmit="handleUpload(event)" class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Note Title *</label>
+                            <input type="text" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Machine Learning Complete Notes">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Subject *</label>
+                            <select required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                <option value="">Select Subject</option>
+                                <option>Data Structures</option>
+                                <option>Database Management</option>
+                                <option>Machine Learning</option>
+                                <option>Web Development</option>
+                                <option>Operating Systems</option>
+                                <option>Computer Networks</option>
+                                <option>Software Engineering</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Semester *</label>
+                            <select required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                <option value="">Select Semester</option>
+                                <option>Semester 1</option>
+                                <option>Semester 2</option>
+                                <option>Semester 3</option>
+                                <option>Semester 4</option>
+                                <option>Semester 5</option>
+                                <option>Semester 6</option>
+                                <option>Semester 7</option>
+                                <option>Semester 8</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">College/University</label>
+                            <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="IIT Delhi, BITS Pilani, etc.">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                        <textarea rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Brief description of your notes, what topics are covered, any special features..."></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Upload Files *</label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-purple-400 transition-colors">
+                            <div class="text-4xl mb-4">📁</div>
+                            <p class="text-gray-600 mb-2">Drag and drop your files here, or click to browse</p>
+                            <p class="text-sm text-gray-500">Supported: PDF, DOC, DOCX, PPT, PPTX (Max 50MB)</p>
+                            <input type="file" multiple accept=".pdf,.doc,.docx,.ppt,.pptx" class="hidden" id="file-upload">
+                            <button type="button" onclick="document.getElementById('file-upload').click()" class="mt-4 bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                                Choose Files
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tags (Optional)</label>
+                        <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="algorithms, python, machine-learning, exam-prep">
+                        <p class="text-sm text-gray-500 mt-1">Separate tags with commas</p>
+                    </div>
+                    
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-purple-800 mb-2">🎯 XP Rewards</h4>
+                        <ul class="text-sm text-purple-700 space-y-1">
+                            <li>• Basic upload: +50 XP</li>
+                            <li>• High-quality notes (detailed): +100 XP</li>
+                            <li>• Past year papers with solutions: +150 XP</li>
+                            <li>• Original content with examples: +200 XP</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <label class="flex items-center">
+                            <input type="checkbox" required class="rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                            <span class="ml-2 text-sm text-gray-600">I confirm that I have the right to share these notes</span>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 rounded-lg font-semibold text-lg hover:from-purple-700 hover:to-blue-700 transition-colors">
+                        🚀 Upload & Earn XP
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Weekly Quests -->
+    <div id="quests-section" class="section hidden">
+        <div class="max-w-6xl mx-auto px-4 py-12">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">🎮 Weekly Quests</h2>
+                <p class="text-gray-600 mb-4">Complete tasks, earn XP, unlock badges!</p>
+                <div class="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-6 py-3 rounded-full inline-block font-semibold">
+                    ⏰ 3 days left in this week
+                </div>
+            </div>
+
+            <!-- Current Quests -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="text-2xl">📤</div>
+                        <div class="quest-complete text-white px-3 py-1 rounded-full text-xs font-semibold">COMPLETED</div>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Upload Master</h3>
+                    <p class="text-gray-600 text-sm mb-4">Upload 2 notes this week</p>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mb-3">
+                        <div class="bg-green-500 h-2 rounded-full" style="width: 100%"></div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-500">2/2 completed</span>
+                        <span class="text-green-600 font-semibold">+150 XP</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="text-2xl">🎯</div>
+                        <div class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-semibold">IN PROGRESS</div>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Quiz Champion</h3>
+                    <p class="text-gray-600 text-sm mb-4">Complete 5 practice quizzes</p>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mb-3">
+                        <div class="bg-blue-500 h-2 rounded-full" style="width: 60%"></div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-500">3/5 completed</span>
+                        <span class="text-blue-600 font-semibold">+100 XP</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="text-2xl">💬</div>
+                        <div class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs font-semibold">NOT STARTED</div>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Community Helper</h3>
+                    <p class="text-gray-600 text-sm mb-4">Help 3 students in discussions</p>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mb-3">
+                        <div class="bg-purple-500 h-2 rounded-full" style="width: 0%"></div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-500">0/3 completed</span>
+                        <span class="text-purple-600 font-semibold">+75 XP</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-yellow-500">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="text-2xl">📚</div>
+                        <div class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-semibold">IN PROGRESS</div>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Study Streak</h3>
+                    <p class="text-gray-600 text-sm mb-4">Study for 7 consecutive days</p>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mb-3">
+                        <div class="bg-yellow-500 h-2 rounded-full" style="width: 71%"></div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-500">5/7 days</span>
+                        <span class="text-yellow-600 font-semibold">+200 XP</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-red-500">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="text-2xl">⭐</div>
+                        <div class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-semibold">BONUS QUEST</div>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Rating Star</h3>
+                    <p class="text-gray-600 text-sm mb-4">Rate 10 downloaded notes</p>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mb-3">
+                        <div class="bg-red-500 h-2 rounded-full" style="width: 30%"></div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-500">3/10 completed</span>
+                        <span class="text-red-600 font-semibold">+50 XP</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-indigo-500">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="text-2xl">🏆</div>
+                        <div class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-xs font-semibold">CHALLENGE</div>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Top Contributor</h3>
+                    <p class="text-gray-600 text-sm mb-4">Be in top 10 this week</p>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mb-3">
+                        <div class="bg-indigo-500 h-2 rounded-full" style="width: 85%"></div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-500">Rank #8</span>
+                        <span class="text-indigo-600 font-semibold">+300 XP</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Badges & Inventory -->
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h3 class="text-2xl font-bold mb-6 text-gray-800">🏅 Your Badges & Inventory</h3>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Earned Badges -->
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4 text-gray-700">Earned Badges</h4>
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="text-center p-4 bg-yellow-50 rounded-lg badge-glow">
+                                <div class="text-3xl mb-2">🥇</div>
+                                <div class="text-xs font-semibold text-yellow-800">First Upload</div>
+                            </div>
+                            <div class="text-center p-4 bg-green-50 rounded-lg badge-glow">
+                                <div class="text-3xl mb-2">📚</div>
+                                <div class="text-xs font-semibold text-green-800">Study Streak</div>
+                            </div>
+                            <div class="text-center p-4 bg-blue-50 rounded-lg badge-glow">
+                                <div class="text-3xl mb-2">🎯</div>
+                                <div class="text-xs font-semibold text-blue-800">Quiz Master</div>
+                            </div>
+                            <div class="text-center p-4 bg-purple-50 rounded-lg badge-glow">
+                                <div class="text-3xl mb-2">💎</div>
+                                <div class="text-xs font-semibold text-purple-800">Premium Notes</div>
+                            </div>
+                            <div class="text-center p-4 bg-red-50 rounded-lg badge-glow">
+                                <div class="text-3xl mb-2">🔥</div>
+                                <div class="text-xs font-semibold text-red-800">Hot Contributor</div>
+                            </div>
+                            <div class="text-center p-4 bg-gray-100 rounded-lg opacity-50">
+                                <div class="text-3xl mb-2">🏆</div>
+                                <div class="text-xs font-semibold text-gray-500">Locked</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Inventory Items -->
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4 text-gray-700">Digital Inventory</h4>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 bg-gradient-to-r from-purple-100 to-pink-100 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="text-2xl">🎨</div>
+                                    <div>
+                                        <div class="font-semibold text-sm">Premium Cover Templates</div>
+                                        <div class="text-xs text-gray-600">Unlocked</div>
+                                    </div>
+                                </div>
+                                <button class="bg-purple-600 text-white px-3 py-1 rounded text-xs hover:bg-purple-700 transition-colors">Use</button>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 bg-gradient-to-r from-green-100 to-blue-100 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="text-2xl">⚡</div>
+                                    <div>
+                                        <div class="font-semibold text-sm">XP Booster (2x)</div>
+                                        <div class="text-xs text-gray-600">3 remaining</div>
+                                    </div>
+                                </div>
+                                <button class="bg-green-600 text-white px-3 py-1 rounded text-xs hover:bg-green-700 transition-colors">Activate</button>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 bg-gradient-to-r from-yellow-100 to-orange-100 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="text-2xl">🖼️</div>
+                                    <div>
+                                        <div class="font-semibold text-sm">Custom Wallpapers</div>
+                                        <div class="text-xs text-gray-600">12 designs</div>
+                                    </div>
+                                </div>
+                                <button class="bg-orange-600 text-white px-3 py-1 rounded text-xs hover:bg-orange-700 transition-colors">View</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Practice Arena -->
+    <div id="practice-section" class="section hidden">
+        <div class="max-w-6xl mx-auto px-4 py-12">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">🎯 Practice Arena</h2>
+                <p class="text-gray-600 mb-4">Test your knowledge with instant feedback!</p>
+                <div class="bg-blue-100 text-blue-800 px-6 py-3 rounded-full inline-block">
+                    🧠 Earn 10-50 XP per quiz completed
+                </div>
+            </div>
+
+            <!-- Quiz Categories -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="bg-gradient-to-br from-blue-500 to-purple-600 text-white p-6 rounded-xl card-hover cursor-pointer" onclick="startQuiz('ds')">
+                    <div class="text-3xl mb-3">🔗</div>
+                    <h3 class="text-xl font-semibold mb-2">Data Structures</h3>
+                    <p class="opacity-90 mb-4">Arrays, Linked Lists, Trees, Graphs</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm opacity-80">25 questions</span>
+                        <span class="bg-white/20 px-3 py-1 rounded-full text-sm">+30 XP</span>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-green-500 to-teal-600 text-white p-6 rounded-xl card-hover cursor-pointer" onclick="startQuiz('algo')">
+                    <div class="text-3xl mb-3">⚡</div>
+                    <h3 class="text-xl font-semibold mb-2">Algorithms</h3>
+                    <p class="opacity-90 mb-4">Sorting, Searching, Dynamic Programming</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm opacity-80">30 questions</span>
+                        <span class="bg-white/20 px-3 py-1 rounded-full text-sm">+40 XP</span>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-orange-500 to-red-600 text-white p-6 rounded-xl card-hover cursor-pointer" onclick="startQuiz('dbms')">
+                    <div class="text-3xl mb-3">🗄️</div>
+                    <h3 class="text-xl font-semibold mb-2">Database Management</h3>
+                    <p class="opacity-90 mb-4">SQL, Normalization, Transactions</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm opacity-80">20 questions</span>
+                        <span class="bg-white/20 px-3 py-1 rounded-full text-sm">+25 XP</span>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-purple-500 to-pink-600 text-white p-6 rounded-xl card-hover cursor-pointer" onclick="startQuiz('os')">
+                    <div class="text-3xl mb-3">💻</div>
+                    <h3 class="text-xl font-semibold mb-2">Operating Systems</h3>
+                    <p class="opacity-90 mb-4">Processes, Memory, File Systems</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm opacity-80">22 questions</span>
+                        <span class="bg-white/20 px-3 py-1 rounded-full text-sm">+28 XP</span>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-indigo-500 to-blue-600 text-white p-6 rounded-xl card-hover cursor-pointer" onclick="startQuiz('cn')">
+                    <div class="text-3xl mb-3">🌐</div>
+                    <h3 class="text-xl font-semibold mb-2">Computer Networks</h3>
+                    <p class="opacity-90 mb-4">TCP/IP, OSI Model, Protocols</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm opacity-80">18 questions</span>
+                        <span class="bg-white/20 px-3 py-1 rounded-full text-sm">+22 XP</span>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-yellow-500 to-orange-500 text-white p-6 rounded-xl card-hover cursor-pointer" onclick="startQuiz('ml')">
+                    <div class="text-3xl mb-3">🤖</div>
+                    <h3 class="text-xl font-semibold mb-2">Machine Learning</h3>
+                    <p class="opacity-90 mb-4">Supervised, Unsupervised, Deep Learning</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm opacity-80">35 questions</span>
+                        <span class="bg-white/20 px-3 py-1 rounded-full text-sm">+50 XP</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Quiz Results -->
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h3 class="text-2xl font-bold mb-6 text-gray-800">📊 Your Recent Performance</h3>
+                
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <div class="text-center p-4 bg-green-50 rounded-lg">
+                        <div class="text-2xl font-bold text-green-600">85%</div>
+                        <div class="text-sm text-gray-600">Average Score</div>
+                    </div>
+                    <div class="text-center p-4 bg-blue-50 rounded-lg">
+                        <div class="text-2xl font-bold text-blue-600">23</div>
+                        <div class="text-sm text-gray-600">Quizzes Completed</div>
+                    </div>
+                    <div class="text-center p-4 bg-purple-50 rounded-lg">
+                        <div class="text-2xl font-bold text-purple-600">650</div>
+                        <div class="text-sm text-gray-600">XP from Quizzes</div>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">DS</div>
+                            <div>
+                                <div class="font-semibold">Data Structures Quiz</div>
+                                <div class="text-sm text-gray-600">Completed 2 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-semibold text-green-600">92%</div>
+                            <div class="text-sm text-gray-500">+35 XP</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">AL</div>
+                            <div>
+                                <div class="font-semibold">Algorithms Quiz</div>
+                                <div class="text-sm text-gray-600">Completed yesterday</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-semibold text-green-600">78%</div>
+                            <div class="text-sm text-gray-500">+28 XP</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold">DB</div>
+                            <div>
+                                <div class="font-semibold">DBMS Quiz</div>
+                                <div class="text-sm text-gray-600">Completed 2 days ago</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-semibold text-yellow-600">65%</div>
+                            <div class="text-sm text-gray-500">+18 XP</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Page -->
+    <div id="about-section" class="section hidden">
+        <div class="max-w-4xl mx-auto px-4 py-12">
+            <!-- Hero -->
+            <div class="text-center mb-16">
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">About NoteX</h1>
+                <p class="text-xl text-gray-600 mb-6">India's First Gamified Learning Platform</p>
+                <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-full inline-block">
+                    <span class="hinglish-text">"Padhai ko banaya hai game, ab learning hai easy aur fun!"</span>
+                </div>
+            </div>
+
+            <!-- Story -->
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-12">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">🚀 Our Story</h2>
+                <div class="prose prose-lg text-gray-600">
+                    <p class="mb-4">
+                        NoteX was born from a simple frustration: <strong>why is studying so boring?</strong> 
+                        As computer science students, we spent countless hours searching for good notes, 
+                        struggling with complex concepts, and feeling demotivated by traditional learning methods.
+                    </p>
+                    <p class="mb-4">
+                        That's when we had our "eureka" moment - <em>what if learning could be as addictive as gaming?</em> 
+                        What if students could earn XP for studying, unlock badges for achievements, and compete 
+                        with friends in a healthy, educational environment?
+                    </p>
+                    <p class="mb-4">
+                        We combined the best of social learning, gamification, and AI technology to create 
+                        NoteX - a platform where students don't just consume content, they actively participate, 
+                        contribute, and grow together.
+                    </p>
+                    <p>
+                        Today, NoteX serves over <strong>5,000+ students</strong> across <strong>200+ colleges</strong> 
+                        in India, making learning more engaging, accessible, and fun for everyone.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Vision & Mission -->
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-gradient-to-br from-purple-500 to-pink-500 text-white p-8 rounded-xl">
+                    <h3 class="text-2xl font-bold mb-4">🎯 Our Vision</h3>
+                    <p class="opacity-90">
+                        To revolutionize education in India by making learning as engaging and addictive 
+                        as the best mobile games, while building the largest community of student contributors.
+                    </p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-blue-500 to-teal-500 text-white p-8 rounded-xl">
+                    <h3 class="text-2xl font-bold mb-4">🎮 Our Mission</h3>
+                    <p class="opacity-90">
+                        To gamify education through XP systems, badges, and community challenges while 
+                        providing high-quality, peer-reviewed study materials accessible to every student.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Founder Section -->
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-12">
+                <h2 class="text-2xl font-bold mb-8 text-gray-800 text-center">👤 Meet the Founder</h2>
+                
+                <div class="max-w-md mx-auto">
+                    <div class="text-center">
+                        <div class="w-24 h-24 bg-gradient-to-br from-purple-400 to-blue-500 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
+                            F
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Flora Thakur</h3>
+                        <p class="text-purple-600 font-medium mb-3">Founder & CEO</p>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Computer Science student at IIBM Patna. Passionate about creating a student-powered 
+                            platform where knowledge flows freely and collaboration wins over competition.
+                        </p>
+                        <div class="flex justify-center space-x-3">
+                            <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm">in</div>
+                            <div class="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center text-white text-sm">𝕏</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Features -->
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">✨ What Makes NoteX Special</h2>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600 text-xl">🎮</div>
+                        <div>
+                            <h4 class="font-semibold mb-2">Gamified Learning</h4>
+                            <p class="text-gray-600 text-sm">Earn XP, unlock badges, complete quests, and climb leaderboards while studying.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 text-xl">🤖</div>
+                        <div>
+                            <h4 class="font-semibold mb-2">AI Assistant</h4>
+                            <p class="text-gray-600 text-sm">Get explanations in Hinglish, personalized study tips, and instant doubt resolution.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600 text-xl">👥</div>
+                        <div>
+                            <h4 class="font-semibold mb-2">Community Driven</h4>
+                            <p class="text-gray-600 text-sm">Students helping students through peer-reviewed notes and collaborative learning.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center text-yellow-600 text-xl">📱</div>
+                        <div>
+                            <h4 class="font-semibold mb-2">Multi-Platform</h4>
+                            <p class="text-gray-600 text-sm">Web platform, Telegram bot, and mobile app for learning anywhere, anytime.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Page -->
+    <div id="contact-section" class="section hidden">
+        <div class="max-w-4xl mx-auto px-4 py-12">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">📞 Get in Touch</h2>
+                <p class="text-gray-600 mb-4">Have questions, feedback, or want to collaborate?</p>
+                <div class="hinglish-text text-lg">"Hum sunne ke liye hamesha ready hain!"</div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- Contact Info -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-6 text-gray-800">💬 Let's Connect</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600 text-xl">📧</div>
+                            <div>
+                                <h4 class="font-semibold mb-1">Email Us</h4>
+                                <p class="text-gray-600 text-sm mb-2">For general inquiries and support</p>
+                                <a href="mailto:hello@notex.in" class="text-purple-600 hover:text-purple-800">hello@notex.in</a>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 text-xl">🤝</div>
+                            <div>
+                                <h4 class="font-semibold mb-1">Partnerships</h4>
+                                <p class="text-gray-600 text-sm mb-2">College collaborations and partnerships</p>
+                                <a href="mailto:partnerships@notex.in" class="text-blue-600 hover:text-blue-800">partnerships@notex.in</a>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center text-green-600 text-xl">📱</div>
+                            <div>
+                                <h4 class="font-semibold mb-1">Telegram Community</h4>
+                                <p class="text-gray-600 text-sm mb-2">Join our active student community</p>
+                                <a href="#" class="text-green-600 hover:text-green-800">@NoteXCommunity</a>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center text-red-600 text-xl">🐛</div>
+                            <div>
+                                <h4 class="font-semibold mb-1">Bug Reports</h4>
+                                <p class="text-gray-600 text-sm mb-2">Found a bug? Help us improve!</p>
+                                <a href="mailto:bugs@notex.in" class="text-red-600 hover:text-red-800">bugs@notex.in</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social Links -->
+                    <div class="mt-8">
+                        <h4 class="font-semibold mb-4 text-gray-800">Follow Us</h4>
+                        <div class="flex space-x-4">
+                            <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white cursor-pointer hover:bg-blue-600 transition-colors">
+                                <span class="text-sm font-bold">in</span>
+                            </div>
+                            <div class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-white cursor-pointer hover:bg-gray-900 transition-colors">
+                                <span class="text-sm font-bold">𝕏</span>
+                            </div>
+                            <div class="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center text-white cursor-pointer hover:bg-pink-600 transition-colors">
+                                <span class="text-sm font-bold">ig</span>
+                            </div>
+                            <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center text-white cursor-pointer hover:bg-red-600 transition-colors">
+                                <span class="text-sm font-bold">yt</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <h3 class="text-xl font-semibold mb-6 text-gray-800">📝 Send us a Message</h3>
+                    
+                    <form onsubmit="handleContact(event)" class="space-y-6">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">First Name *</label>
+                                <input type="text" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Arjun">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Last Name *</label>
+                                <input type="text" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Sharma">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                            <input type="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="arjun@example.com">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Subject *</label>
+                            <select required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                <option value="">Select a topic</option>
+                                <option>General Inquiry</option>
+                                <option>Bug Report</option>
+                                <option>Feature Request</option>
+                                <option>Partnership Opportunity</option>
+                                <option>College Collaboration</option>
+                                <option>Technical Support</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">College/University</label>
+                            <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="IIT Delhi, BITS Pilani, etc.">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Message *</label>
+                            <textarea rows="5" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Tell us how we can help you..."></textarea>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <input type="checkbox" required class="rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                            <span class="ml-2 text-sm text-gray-600">I agree to receive updates and newsletters from NoteX</span>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-colors">
+                            🚀 Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="mt-16 bg-white rounded-xl shadow-lg p-8">
+                <h3 class="text-2xl font-bold mb-6 text-gray-800">❓ Frequently Asked Questions</h3>
+                
+                <div class="space-y-6">
+                    <div class="border-b border-gray-200 pb-4">
+                        <h4 class="font-semibold mb-2 text-gray-800">How do I earn XP on NoteX?</h4>
+                        <p class="text-gray-600 text-sm">You can earn XP by uploading notes (+50-200 XP), completing quizzes (+10-50 XP), helping other students (+25 XP), and completing weekly quests (+75-300 XP).</p>
+                    </div>
+                    
+                    <div class="border-b border-gray-200 pb-4">
+                        <h4 class="font-semibold mb-2 text-gray-800">Is NoteX free to use?</h4>
+                        <p class="text-gray-600 text-sm">Yes! NoteX is completely free for students. We believe education should be accessible to everyone. Premium features may be introduced in the future, but core functionality will always remain free.</p>
+                    </div>
+                    
+                    <div class="border-b border-gray-200 pb-4">
+                        <h4 class="font-semibold mb-2 text-gray-800">How can my college partner with NoteX?</h4>
+                        <p class="text-gray-600 text-sm">We'd love to partner with your college! Email us at partnerships@notex.in with details about your institution, and we'll set up a call to discuss collaboration opportunities.</p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-semibold mb-2 text-gray-800">When will the AI Assistant be available?</h4>
+                        <p class="text-gray-600 text-sm">Our AI Assistant is currently in beta testing with select users. We plan to roll it out to all users by the end of this semester. Join our Telegram community for early access updates!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Section -->
+    <div id="profile-section" class="section hidden">
+        <div class="max-w-4xl mx-auto px-4 py-12">
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <!-- Profile Header -->
+                <div class="gradient-bg text-white p-8">
+                    <div class="flex items-center space-x-6">
+                        <div class="w-20 h-20 bg-yellow-400 rounded-full flex items-center justify-center text-purple-800 text-2xl font-bold">F</div>
+                        <div>
+                            <h2 class="text-2xl font-bold">Flora Thakur</h2>
+                            <p class="opacity-90">Computer Science • IIBM, Patna</p>
+                            <div class="flex items-center space-x-4 mt-2">
+                                <span class="text-sm">🔥 12-day streak</span>
+                                <span class="text-sm">⚡ 1,250 XP</span>
+                                <span class="text-sm">🏆 Rank #47</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- XP Progress -->
+                <div class="p-6 bg-gray-50">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-medium text-gray-700">Level 5 Progress</span>
+                        <span class="text-sm text-gray-500">1,250 / 1,500 XP</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                        <div class="xp-bar" style="width: 83%"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">250 XP to next level!</p>
+                </div>
+                
+                <!-- Profile Stats -->
+                <div class="p-8">
+                    <div class="grid md:grid-cols-4 gap-6 mb-8">
+                        <div class="text-center p-4 bg-purple-50 rounded-lg">
+                            <div class="text-2xl font-bold text-purple-600">23</div>
+                            <div class="text-sm text-gray-600">Notes Uploaded</div>
+                        </div>
+                        <div class="text-center p-4 bg-green-50 rounded-lg">
+                            <div class="text-2xl font-bold text-green-600">156</div>
+                            <div class="text-sm text-gray-600">Notes Downloaded</div>
+                        </div>
+                        <div class="text-center p-4 bg-blue-50 rounded-lg">
+                            <div class="text-2xl font-bold text-blue-600">89</div>
+                            <div class="text-sm text-gray-600">Quizzes Completed</div>
+                        </div>
+                        <div class="text-center p-4 bg-yellow-50 rounded-lg">
+                            <div class="text-2xl font-bold text-yellow-600">12</div>
+                            <div class="text-sm text-gray-600">Badges Earned</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Activity -->
+                    <h3 class="text-xl font-semibold mb-4">Recent Activity</h3>
+                    <div class="space-y-3 mb-8">
+                        <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="text-green-600">✅</div>
+                                <span class="text-sm">Completed "Quiz Champion" quest</span>
+                            </div>
+                            <span class="text-green-600 font-semibold text-sm">+100 XP</span>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="text-blue-600">📤</div>
+                                <span class="text-sm">Uploaded "Machine Learning Notes"</span>
+                            </div>
+                            <span class="text-blue-600 font-semibold text-sm">+150 XP</span>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="text-purple-600">🎯</div>
+                                <span class="text-sm">Scored 92% in Data Structures quiz</span>
+                            </div>
+                            <span class="text-purple-600 font-semibold text-sm">+35 XP</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Settings -->
+                    <div class="border-t border-gray-200 pt-8">
+                        <h3 class="text-xl font-semibold mb-4">Account Settings</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                <div>
+                                    <div class="font-semibold">Telegram Notifications</div>
+                                    <div class="text-sm text-gray-600">Get notified about new notes and quests</div>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" checked class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                                </label>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                <div>
+                                    <div class="font-semibold">Public Profile</div>
+                                    <div class="text-sm text-gray-600">Show your profile on leaderboards</div>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" checked class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 'home';
+
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+            
+            // Show selected section
+            document.getElementById(section + '-section').classList.remove('hidden');
+            currentSection = section;
+        }
+
+        function handleUpload(event) {
+            event.preventDefault();
+            
+            // Get form data
+            const title = event.target.querySelector('input[placeholder="Machine Learning Complete Notes"]').value;
+            const subject = event.target.querySelector('select').value;
+            
+            // Simulate upload process
+            setTimeout(() => {
+                alert(`🎉 "${title}" uploaded successfully!\n\n+150 XP earned for high-quality notes!\n\nYour notes are now being reviewed by our community moderators.`);
+                showSection('notes-hub');
+            }, 2000);
+        }
+
+        function handleContact(event) {
+            event.preventDefault();
+            
+            // Simulate form submission
+            setTimeout(() => {
+                alert('🚀 Message sent successfully!\n\nThanks for reaching out! We\'ll get back to you within 24 hours.\n\n+25 XP for community engagement!');
+                event.target.reset();
+            }, 1000);
+        }
+
+        function startQuiz(subject) {
+            const subjects = {
+                'ds': 'Data Structures',
+                'algo': 'Algorithms', 
+                'dbms': 'Database Management',
+                'os': 'Operating Systems',
+                'cn': 'Computer Networks',
+                'ml': 'Machine Learning'
+            };
+            
+            alert(`🎯 Starting ${subjects[subject]} Quiz!\n\nGet ready for 20 challenging questions.\nEarn up to 50 XP based on your performance!\n\nGood luck! 🍀`);
+        }
+
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // Initialize
+        showSection('home');
+
+        // Simulate XP updates
+        setInterval(() => {
+            const xpElements = document.querySelectorAll('.xp-bar');
+            xpElements.forEach(bar => {
+                const currentWidth = parseInt(bar.style.width) || 75;
+                if (currentWidth < 100) {
+                    bar.style.width = (currentWidth + 1) + '%';
+                }
+            });
+        }, 5000);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98211f1550fb7a1f',t:'MTc1ODM2OTE5Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
